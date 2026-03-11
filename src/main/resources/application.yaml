@@ -1,11 +1,11 @@
 spring:
   application:
-    name: demo
+    name: expense-tracker
   profiles:
     active: dev
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/demo
+    url: jdbc:postgresql://localhost:5432/expense-tracker
     username: demo
     password: demo
     driver-class-name: org.postgresql.Driver
