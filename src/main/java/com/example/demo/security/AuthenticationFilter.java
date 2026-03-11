@@ -41,14 +41,16 @@ public class AuthenticationFilter extends OncePerRequestFilter {
                     String tenantIdStr = authService.validateToken(token);
                     UUID tenantId = UUID.fromString(tenantIdStr);
                     
-                    tenantRepository.findById(tenantId).ifPresent(tenant -> {
+                    var tenantOpt = tenantRepository.findById(tenantId);
+                    if (tenantOpt.isPresent() && tenantOpt.get().getSubdomain().equals(subdomain)) {
+                        var tenant = tenantOpt.get();
                         TenantContext.setTenantId(tenant.getId());
                         
                         UsernamePasswordAuthenticationToken authentication = 
                             new UsernamePasswordAuthenticationToken(tenant, null, Collections.emptyList());
                         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                         SecurityContextHolder.getContext().setAuthentication(authentication);
-                    });
+                    }
                 } catch (Exception e) {
                 }
             }
